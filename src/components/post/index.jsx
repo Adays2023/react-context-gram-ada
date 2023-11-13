@@ -1,17 +1,11 @@
-import { Card, Container } from "react-bootstrap";
-import { PostHeader } from "../post-header/header";
-import { PostBody } from "../post-info/body";
-import { PostPicture } from "../post-picture/picture";
+import FeedContext from "../../context/feed/FeedContext";
+import { useContext } from "react";
 
 export const Post = () => {
-
-    return (
-      <Container className="post">
-        <Card>
-          <PostHeader/>
-          <PostPicture />
-          <PostBody/>
-        </Card>
-      </Container>
-    );
-}
+  const {showPost} = useContext(FeedContext);
+  return (
+    <div key={`POST-1`}>
+      {showPost()}
+    </div>
+  );
+};

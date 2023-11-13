@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { CardImg, Col, Container, Row } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import { useContext, useEffect, useReducer, useState } from "react";
+import { CardImg, Col, Container, Row } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import UserContext from "../../context/user/UserContext";
 
 export const SuggestedAccountsModal = (props) => {
-
-  const {displayModal, onClose, suggestedAccounts} = props;
+  const {getSuggestedAccount,suggestedAccounts,addAccount} = useContext(UserContext);
+  const { displayModal, onClose } = props;
 
   const [show, setShow] = useState(displayModal || false);
 
@@ -14,50 +15,51 @@ export const SuggestedAccountsModal = (props) => {
     if (onClose) {
       onClose();
     }
-  }
-
-  console.log(suggestedAccounts);
+  };
+useEffect(()=>{
+  getSuggestedAccount();
+  console.log("suggestedAccounts",suggestedAccounts);
+},[])
   return (
     <>
       <Modal show={show} onHide={handleClose} animation={true}>
-          <Modal.Header closeButton>
-            <Modal.Title>Suggested Accounts</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Container>
-              {
-                !!suggestedAccounts && suggestedAccounts.map((account, index) => {
-
-                  return (
-                    <>
-                      <Row key={`suggested-account-i${index}`}>
-                        <Col>
+        <Modal.Header closeButton>
+          <Modal.Title>Suggested Accounts</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Container>
+            {!!suggestedAccounts &&
+              suggestedAccounts.map((account, index) => {
+                return (
+                  <>
+                    <Row key={`suggested-account${index}`}>
+                      <Col>
                         <CardImg
                           src={account.thumbnail}
                           className="post-avatar rounded-3"
-                          style={{width: '60px'}}
-                        >  
-                        </CardImg>
-                        </Col>
-                        <Col xs={6}>
-                          <strong>
-                            {account.username}
-                          </strong>
-                        </Col>
-                        <Col>
-                          <Button>
-                            Follow
-                          </Button>
-                        </Col>              
-                      </Row>
-                      <br />              
-                    </>
-                  );
-                })
-              }
-            </Container>
-          </Modal.Body>
-        </Modal>    
+                          style={{ width: "60px" }}
+                        ></CardImg>
+                      </Col>
+                      <Col xs={6}>
+                        <strong>{account.username}</strong>
+                      </Col>
+                      <Col>
+                        <Button
+                          onClick={() => {
+                            addAccount(account)
+                          }}
+                        >
+                          Follow
+                        </Button>
+                      </Col>
+                    </Row>
+                    <br />
+                  </>
+                );
+              })}
+          </Container>
+        </Modal.Body>
+      </Modal>
     </>
   );
-}
+};
